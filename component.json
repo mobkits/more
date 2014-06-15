@@ -1,0 +1,32 @@
+{
+  "name": "more",
+  "repository": "chemzqm/more",
+  "description": "load more data when bottom is shown",
+  "version": "0.0.1",
+  "keywords": [],
+  "demo": "http://chemzqm.github.io/more/",
+  "dependencies": {
+    "chemzqm/computed-style": "*",
+    "component/domify": "*",
+    "component/per-frame": "*",
+    "component/event": "*"
+  },
+  "development": {
+    "dependencies": {}
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ],
+  "images": [
+    "images/refresh.png",
+    "images/refresh@2x.png"
+  ],
+  "templates": [
+    "template.html"
+  ],
+  "styles": [
+    "more.css"
+  ]
+}

@@ -1,0 +1,65 @@
+var styles = require('computed-style');
+var events = require('event');
+var domify = require('domify');
+var throttle = require('per-frame');
+var template = require('./template.html');
+
+function More(el, fn) {
+  if (!(this instanceof More)) return new More(el, fn);
+  this.el = el;
+  this.callback = fn;
+  while (el) {
+    if (styles(el).overflowY === 'scroll') break;
+    el = el.parentNode;
+    if (el === document.documentElement) el = null;
+  }
+  this.div = domify(template);
+  insertAfter(this.el, this.div);
+  var scrollable = el ? el : window;
+  this.onscroll();
+  var onscroll = throttle(this.onscroll.bind(this));
+  events.bind(scrollable, 'scroll', onscroll);
+}
+
+More.prototype.onscroll = function () {
+  if (this.loading || this._disabled) return;
+  if (!check(this.el)) return;
+  var self = this;
+  this.div.style.display = 'block';
+  this.callback.call(this, cb);
+  var h = styles(this.el).height;
+  this.loading = true;
+  function cb(disable) {
+    if (disable) self.disable();
+    self.loading = false;
+    self.div.style.display = 'none';
+  }
+}
+
+More.prototype.disable = function () {
+  this._disabled = true;
+}
+
+More.prototype.text = function (text) {
+  this.div.querySelector('span').innerHTML = text;
+}
+
+/**
+ * check el is visible on viewport
+ */
+function check(el) {
+  var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  var bottom = el.getBoundingClientRect().bottom;
+  return bottom < vh;
+}
+
+function insertAfter(referenceNode, newNode) {
+  var next = referenceNode.nextSibling;
+  if (next) {
+    referenceNode.parentNode.insertBefore(newNode, next);
+  } else {
+    referenceNode.parentNode.appendChild(newNode);
+  }
+}
+
+module.exports = More;

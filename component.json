@@ -2,7 +2,7 @@
   "name": "more",
   "repository": "chemzqm/more",
   "description": "load more data when bottom is shown",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "keywords": [],
   "demo": "http://chemzqm.github.io/more/",
   "dependencies": {

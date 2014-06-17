@@ -32,7 +32,7 @@ more(el, function(done) {
 
 ### new More(el, callback)
 
-Append `more` to list element `el`, call the callback with a function when more div could be visible.
+Insert `more` after list element `el`, call the callback with a function when more div could be visible.
 
 Pass true to disable more loading to the function passed to callback.
 

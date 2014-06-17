@@ -17,23 +17,24 @@ function More(el, fn) {
   insertAfter(this.el, this.div);
   var scrollable = el ? el : window;
   this.onscroll();
-  var onscroll = throttle(this.onscroll.bind(this));
-  events.bind(scrollable, 'scroll', onscroll);
+  var self = this;
+  events.bind(scrollable, 'scroll',  throttle(function () {
+    self.onscroll();
+  }));
 }
 
 More.prototype.onscroll = function () {
   if (this.loading || this._disabled) return;
   if (!check(this.el)) return;
-  var self = this;
   this.div.style.display = 'block';
-  this.callback.call(this, cb);
   var h = styles(this.el).height;
   this.loading = true;
-  function cb(disable) {
+  var self = this;
+  this.callback(function (disable) {
     if (disable) self.disable();
     self.loading = false;
     self.div.style.display = 'none';
-  }
+  });
 }
 
 More.prototype.disable = function () {

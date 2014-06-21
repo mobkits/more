@@ -4,18 +4,13 @@ var domify = require('domify');
 var throttle = require('per-frame');
 var template = require('./template.html');
 
-function More(el, fn) {
+function More(el, fn, scrollable) {
   if (!(this instanceof More)) return new More(el, fn);
   this.el = el;
   this.callback = fn;
-  while (el) {
-    if (styles(el).overflowY === 'scroll') break;
-    el = el.parentNode;
-    if (el === document.documentElement) el = null;
-  }
   this.div = domify(template);
   insertAfter(this.el, this.div);
-  var scrollable = el ? el : window;
+  scrollable = scrollable || el.parentNode;
   this.onscroll();
   var self = this;
   events.bind(scrollable, 'scroll',  throttle(function () {

@@ -5,7 +5,7 @@ var throttle = require('per-frame');
 var template = require('./template.html');
 
 function More(el, fn, scrollable) {
-  if (!(this instanceof More)) return new More(el, fn);
+  if (!(this instanceof More)) return new More(el, fn, scrollable);
   this.el = el;
   this.callback = fn;
   this.div = domify(template);

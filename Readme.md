@@ -32,7 +32,7 @@ more(el, function(done) {
 
 ### new More(el, callback, [scrollable])
 
-Insert `more` after list element `el`, call the callback with a function when more div could be visible.
+Insert `more` after list `el`, call the callback with a function when more div could be visible.
 
 scrollable is the element emit `scroll` event, it's el parentNode by default.
 

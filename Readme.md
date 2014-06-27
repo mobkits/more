@@ -34,9 +34,7 @@ more(el, function(done) {
 
 Insert `more` after list `el`, call the callback with a function when more div could be visible.
 
-scrollable is the element emit `scroll` event, it's el parentNode by default.
-
-Pass true to disable more loading to the function passed to callback.
+scrollable is Object (could be element or other object) which emit `scroll` event.
 
 ### .text(string)
 

@@ -8,7 +8,7 @@
   "dependencies": {
     "chemzqm/computed-style": "*",
     "component/domify": "*",
-    "component/per-frame": "*",
+    "component/debounce": "*",
     "component/event": "*"
   },
   "development": {

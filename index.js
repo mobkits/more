@@ -1,7 +1,7 @@
 var styles = require('computed-style');
 var events = require('event');
 var domify = require('domify');
-var throttle = require('per-frame');
+var debounce = require('debounce');
 var template = require('./template.html');
 
 function More(el, fn, scrollable) {
@@ -13,9 +13,9 @@ function More(el, fn, scrollable) {
   scrollable = scrollable || el.parentNode;
   this.onscroll();
   var self = this;
-  events.bind(scrollable, 'scroll',  throttle(function () {
+  scrollable.addEventListener('scroll', debounce(function () {
     self.onscroll();
-  }));
+  }), false);
 }
 
 More.prototype.onscroll = function () {

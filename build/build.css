@@ -7,6 +7,7 @@
   text-align: center;
   color: #999;
   display: none;
+  height: 22px;
 }
 
 .more-loading .more-refresh {
@@ -24,7 +25,7 @@
 }
 
 @media all and (-webkit-min-device-pixel-ratio: 1.5) {
-  .more-loading .icon-refresh {
+  .more-loading .more-refresh {
     background: url('more/images/refresh@2x.png') no-repeat;
     -webkit-background-size: contain;
     background-size: contain;

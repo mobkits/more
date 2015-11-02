@@ -1,23 +1,9 @@
 
-build: components index.js more.css template.html
-	@component build --dev
-
-components: component.json
-	@component install --dev
-
-clean:
-	rm -fr build components
-
-watch:
-	@component build --dev -w
+dev:
+	@webpack example/index.js example/bundle.js --module-bind html --module-bind "css=style!css" --module-bind "png=url-loader?mimetype=image/png"
 
 doc:
-	@component build
-	@rm -fr .gh-pages
-	@mkdir .gh-pages
-	@mv build .gh-pages/
-	@cp example.html .gh-pages/index.html
-	@ghp-import .gh-pages -n -p
-	@rm -fr .gh-pages
+	@webpack example/index.js example/bundle.js --module-bind html --module-bind "css=style!css" --module-bind "png=url-loader?mimetype=image/png"
+	@ghp-import example -n -p
 
 .PHONY: clean doc

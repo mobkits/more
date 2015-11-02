@@ -2,6 +2,8 @@
 
 Append more div the list element, check loading on scroll.
 
+TODO: support promise
+
 [demo](http://chemzqm.github.io/more/)
 
 ## Installation

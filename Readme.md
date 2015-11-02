@@ -2,11 +2,13 @@
 
 Append more div the list element, check loading on scroll.
 
-TODO: support promise
-
 [demo](http://chemzqm.github.io/more/)
 
 ## Installation
+
+Install with npm:
+
+    $ npm install more-mobile
 
 Install with [component(1)](http://component.io):
 
@@ -18,17 +20,12 @@ Install with [component(1)](http://component.io):
 var more = require('more');
 var el = document.querySelector('ul');
 var times = 0;
-more(el, function(done) {
-  times++;
-  if (times == 3) return done(true);
-  setTimeout(function() {
-    for (var i = 0; i < 5; i++) {
-      var li = document.createElement('li');
-      li.innerHTML = i + 1;
-      el.appendChild(li);
-    }
-    done();
-  }, 1000);
+more(el, function() {
+  return new Promise(function(resolve, reject) {
+    // do something
+    resove(true) //disable loading
+  })
+});
 })
 ```
 
@@ -36,7 +33,7 @@ more(el, function(done) {
 
 Insert `more` after list `el`, call the callback with a function when more div could be visible.
 
-scrollable is Object (could be element or other object) which emit `scroll` event.
+scrollable is Object (could be element or other object) which emit `scroll` event, it default to `el.parentNode`
 
 ### .text(string)
 

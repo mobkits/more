@@ -23,11 +23,15 @@ More.prototype.onscroll = function () {
   // var h = computedStyle(this.el, 'height')
   this.loading = true
   var self = this
-  this.callback(function (disable) {
-    if (disable) self.disable()
+  var cb = function (disable) {
+    if (disable === true) self.disable()
     self.loading = false
     self.div.style.display = 'none'
-  })
+  }
+  var res = this.callback(cb)
+  if (typeof res.then === 'function') {
+    res.then(cb, cb)
+  }
 }
 
 More.prototype.disable = function () {

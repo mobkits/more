@@ -48,18 +48,30 @@
 	var more = __webpack_require__(7);
 	var el = document.querySelector('ul');
 	var times = 0;
-	more(el, function(done) {
-	  times++;
-	  if (times == 3) return done(true);
-	  setTimeout(function() {
-	    for (var i = 0; i < 5; i++) {
-	      var li = document.createElement('li');
-	      li.innerHTML = i + 1;
-	      el.appendChild(li);
-	    }
-	    done();
-	  }, 1000);
+	var m = more(el, function() {
+	  times++
+	  return new Promise(function (resolve) {
+	    setTimeout(function () {
+	      if (times === 4) {
+	        m.disable()
+	      } else {
+	        append(5)
+	      }
+	    resolve()
+	    }, 3000)
+	  })
 	})
+
+
+	var i = 0
+	function append(count) {
+	  for (var j = count - 1; j >= 0; j--) {
+	    i++
+	    var li = document.createElement('li')
+	    li.textContent = i
+	    el.appendChild(li)
+	  }
+	}
 
 
 /***/ },
@@ -453,11 +465,14 @@
 	  // var h = computedStyle(this.el, 'height')
 	  this.loading = true
 	  var self = this
-	  this.callback(function (disable) {
-	    if (disable) self.disable()
+	  var cb = function () {
 	    self.loading = false
 	    self.div.style.display = 'none'
-	  })
+	  }
+	  var res = this.callback(cb)
+	  if (res && typeof res.then === 'function') {
+	    res.then(cb, cb)
+	  }
 	}
 
 	More.prototype.disable = function () {
@@ -681,7 +696,7 @@
 /* 11 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh more-spin\"></i> <span>刷新中...</span>\n</div>\n";
+	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh more-spin\"></i> <span>加载中...</span>\n</div>\n";
 
 /***/ }
 /******/ ]);

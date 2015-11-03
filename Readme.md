@@ -23,11 +23,12 @@ var times = 0;
 more(el, function() {
   return new Promise(function(resolve, reject) {
     var arr
-    // do something
+    // fetch the list
+    if (err)return reject()
     if (arr.length) {
-      resolve() //disable loading
-      } else {
-        }
+      more.disable() //disable loading
+    }
+    resolve()
   })
 });
 })

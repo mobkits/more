@@ -23,13 +23,12 @@ More.prototype.onscroll = function () {
   // var h = computedStyle(this.el, 'height')
   this.loading = true
   var self = this
-  var cb = function (disable) {
-    if (disable === true) self.disable()
+  var cb = function () {
     self.loading = false
     self.div.style.display = 'none'
   }
   var res = this.callback(cb)
-  if (typeof res.then === 'function') {
+  if (res && typeof res.then === 'function') {
     res.then(cb, cb)
   }
 }

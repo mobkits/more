@@ -2,15 +2,27 @@ require('../more.css')
 var more = require('..');
 var el = document.querySelector('ul');
 var times = 0;
-more(el, function(done) {
-  times++;
-  if (times == 3) return done(true);
-  setTimeout(function() {
-    for (var i = 0; i < 5; i++) {
-      var li = document.createElement('li');
-      li.innerHTML = i + 1;
-      el.appendChild(li);
-    }
-    done();
-  }, 1000);
+var m = more(el, function() {
+  times++
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      if (times === 4) {
+        m.disable()
+      } else {
+        append(5)
+      }
+    resolve()
+    }, 3000)
+  })
 })
+
+
+var i = 0
+function append(count) {
+  for (var j = count - 1; j >= 0; j--) {
+    i++
+    var li = document.createElement('li')
+    li.textContent = i
+    el.appendChild(li)
+  }
+}

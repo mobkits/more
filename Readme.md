@@ -22,8 +22,12 @@ var el = document.querySelector('ul');
 var times = 0;
 more(el, function() {
   return new Promise(function(resolve, reject) {
+    var arr
     // do something
-    resove(true) //disable loading
+    if (arr.length) {
+      resolve() //disable loading
+      } else {
+        }
   })
 });
 })

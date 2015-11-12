@@ -5,6 +5,7 @@ var events = require('event')
 
 /**
  * Init more with element(for insertAfter), callback ,and scrollable
+ * Scrollable default to el.parentNode, could be window
  *
  * @param  {Element}  el
  * @param  {Function}  fn

@@ -74,7 +74,7 @@ describe('onscroll', function () {
       assert.equal(m.div.style.display, 'block')
       m.remove()
       done()
-    }, 100)
+    }, 200)
   })
 
   it('should not load when not scroll to bottom', function (done) {
@@ -89,7 +89,7 @@ describe('onscroll', function () {
       //assert.equal(m.div.style.display, 'none')
       m.remove()
       done()
-    }, 100)
+    }, 200)
   })
 
   it('should hide the div after load', function (done) {
@@ -100,7 +100,7 @@ describe('onscroll', function () {
     setTimeout(function () {
       assert.equal(m.div.style.display, 'none')
       done()
-    }, 100)
+    }, 200)
   })
 
   it('should be promise awared', function (done) {
@@ -113,7 +113,7 @@ describe('onscroll', function () {
     setTimeout(function () {
       assert.equal(m.div.style.display, 'none')
       done()
-    }, 100)
+    }, 200)
   })
 
   it('should hide div on rejected', function (done) {
@@ -126,14 +126,15 @@ describe('onscroll', function () {
     setTimeout(function () {
       assert.equal(m.div.style.display, 'none')
       done()
-    }, 100)
+    }, 200)
   })
 })
 
 describe('scroll window', function () {
-  var list = document.createElement('ul')
-  document.body.appendChild(list)
+  var list
   beforeEach(function () {
+    list = document.createElement('ul')
+    document.body.appendChild(list)
     var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
     list.style.height = (vh + 50) + 'px'
     window.scrollTo(0, 0)
@@ -141,6 +142,7 @@ describe('scroll window', function () {
 
   afterEach(function () {
     window.scrollTo(0, 0)
+    document.body.removeChild(list)
   })
 
   it('should not load when not scroll to bottom', function (done) {
@@ -153,7 +155,7 @@ describe('scroll window', function () {
       assert.notEqual(fired, true)
       m.remove()
       done()
-    }, 100)
+    }, 200)
   })
 
   it('should load when scroll to bottom', function (done) {
@@ -168,7 +170,7 @@ describe('scroll window', function () {
       assert.equal(fired, true)
       m.remove()
       done()
-    }, 100)
+    }, 200)
   })
 })
 
@@ -185,7 +187,7 @@ describe('.disable()', function() {
       assert.equal(m.div.style.display, 'none')
       assert.notEqual(fired, true)
       done()
-    }, 100)
+    }, 200)
   })
 })
 
@@ -212,7 +214,7 @@ describe('.remove()', function() {
     setTimeout(function () {
       assert.notEqual(fired, true)
       done()
-    }, 100)
+    }, 200)
   })
 })
 

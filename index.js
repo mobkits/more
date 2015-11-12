@@ -18,8 +18,7 @@ function More(el, fn, scrollable) {
   this.div = domify(template)
   insertAfter(this.el, this.div)
   this.scrollable = scrollable = scrollable || el.parentNode
-  this.onscroll()
-  this._onscroll = debounce(this.onscroll.bind(this))
+  this._onscroll = debounce(this.onscroll.bind(this), 100, true)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
 
@@ -28,9 +27,9 @@ function More(el, fn, scrollable) {
  *
  * @api private
  */
-More.prototype.onscroll = function () {
+More.prototype.onscroll = function (e) {
   if (this.loading || this._disabled) return
-  if (!check(this.el)) return
+  if (!check(this.scrollable) && e !== true) return
   this.div.style.display = 'block'
   // var h = computedStyle(this.el, 'height')
   this.loading = true
@@ -53,8 +52,19 @@ More.prototype.onscroll = function () {
  */
 More.prototype.disable = function () {
   this._disabled = true
+  this.div.style.display = 'none'
+  this.loading = false
 }
 
+/**
+ * Force more to start loading
+ *
+ * @return {undefined}
+ * @api public
+ */
+More.prototype.load = function () {
+  this.onscroll(true)
+}
 /**
  * Set the loading text
  *
@@ -62,7 +72,7 @@ More.prototype.disable = function () {
  * @api public
  */
 More.prototype.text = function (text) {
-  this.div.querySelector('more-text').innerHTML = text
+  this.div.querySelector('.more-text').innerHTML = text
 }
 
 /**
@@ -77,12 +87,20 @@ More.prototype.remove = function () {
 }
 
 /**
- * check el is visible on viewport
+ * check if scrollable scroll to end
  */
-function check(el) {
-  var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-  var bottom = el.getBoundingClientRect().bottom
-  return bottom < vh
+function check(scrollable) {
+  if (scrollable === window) {
+    // viewport height
+    var supportPageOffset = window.pageXOffset !== undefined
+    var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+    var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+    var scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
+    if (getDocHeight() - vh == scrollY) return true
+  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 1) {
+    return true
+  }
+  return false
 }
 
 function insertAfter(referenceNode, newNode) {
@@ -92,6 +110,11 @@ function insertAfter(referenceNode, newNode) {
   } else {
     referenceNode.parentNode.appendChild(newNode)
   }
+}
+
+function getDocHeight() {
+    var D = document;
+    return Math.max(D.body.scrollHeight, D.documentElement.scrollHeight);
 }
 
 module.exports = More

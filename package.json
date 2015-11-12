@@ -33,7 +33,7 @@
     "webpack-dev-server": "^1.12.1"
   },
   "scripts": {
-    "test": "make"
+    "test": "make test-coveralls"
   },
   "repository": {
     "type": "git",

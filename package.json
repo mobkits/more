@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "component-event": "^0.1.4",
-    "debounce": "^1.0.0",
-    "domify": "^1.4.0"
+    "domify": "^1.4.0",
+    "throttleit": "^1.0.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.4",

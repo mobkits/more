@@ -1,5 +1,5 @@
 var domify = require('domify')
-var debounce = require('debounce')
+var throttle = require('throttleit')
 var template = require('./template.html')
 var events = require('event')
 
@@ -19,7 +19,7 @@ function More(el, fn, scrollable) {
   this.div = domify(template)
   insertAfter(this.el, this.div)
   this.scrollable = scrollable = scrollable || el.parentNode
-  this._onscroll = debounce(this.onscroll.bind(this), 100)
+  this._onscroll = throttle(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
 
@@ -30,7 +30,7 @@ function More(el, fn, scrollable) {
  */
 More.prototype.onscroll = function (e) {
   if (this.loading || this._disabled) return
-  if (!check(this.scrollable) && e !== true) return
+  if (!check(this.scrollable, this.delta || 10) && e !== true) return
   this.div.style.display = 'block'
   // var h = computedStyle(this.el, 'height')
   this.loading = true
@@ -90,15 +90,15 @@ More.prototype.remove = function () {
 /**
  * check if scrollable scroll to end
  */
-function check(scrollable) {
+function check(scrollable, delta) {
   if (scrollable === window) {
     // viewport height
     var supportPageOffset = window.pageXOffset !== undefined
     var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
     var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
     var scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
-    if (getDocHeight() - vh == scrollY) return true
-  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 1) {
+    if (getDocHeight() - vh - scrollY < delta) return true
+  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < delta) {
     return true
   }
   return false

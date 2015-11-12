@@ -18,7 +18,7 @@ function More(el, fn, scrollable) {
   this.div = domify(template)
   insertAfter(this.el, this.div)
   this.scrollable = scrollable = scrollable || el.parentNode
-  this._onscroll = debounce(this.onscroll.bind(this), 100, true)
+  this._onscroll = debounce(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
 

@@ -7,6 +7,7 @@
     "example": "example"
   },
   "dependencies": {
+    "component-event": "^0.1.4",
     "debounce": "^1.0.0",
     "domify": "^1.4.0"
   },

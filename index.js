@@ -1,21 +1,33 @@
 var domify = require('domify')
 var debounce = require('debounce')
 var template = require('./template.html')
+var events = require('event')
 
+/**
+ * Init more with element(for insertAfter), callback ,and scrollable
+ *
+ * @param  {Element}  el
+ * @param  {Function}  fn
+ * @param {Element} scrollable
+ * @api public
+ */
 function More(el, fn, scrollable) {
   if (!(this instanceof More)) return new More(el, fn, scrollable)
   this.el = el
   this.callback = fn
   this.div = domify(template)
   insertAfter(this.el, this.div)
-  scrollable = scrollable || el.parentNode
+  this.scrollable = scrollable = scrollable || el.parentNode
   this.onscroll()
-  var self = this
-  scrollable.addEventListener('scroll', debounce(function () {
-    self.onscroll()
-  }), false)
+  this._onscroll = debounce(this.onscroll.bind(this))
+  events.bind(scrollable, 'scroll', this._onscroll)
 }
 
+/**
+ * On scroll event handler
+ *
+ * @api private
+ */
 More.prototype.onscroll = function () {
   if (this.loading || this._disabled) return
   if (!check(this.el)) return
@@ -33,12 +45,35 @@ More.prototype.onscroll = function () {
   }
 }
 
+/**
+ * Disable loading more data
+ *
+ * @return {undefined}
+ * @api public
+ */
 More.prototype.disable = function () {
   this._disabled = true
 }
 
+/**
+ * Set the loading text
+ *
+ * @param {String} text
+ * @api public
+ */
 More.prototype.text = function (text) {
-  this.div.querySelector('span').innerHTML = text
+  this.div.querySelector('more-text').innerHTML = text
+}
+
+/**
+ * Remove the appended element and unbind event
+ *
+ * @return {undefined}
+ * @api public
+ */
+More.prototype.remove = function () {
+  events.unbind(this.scrollable, 'scroll', this._onscroll)
+  this.div.parentNode.removeChild(this.div)
 }
 
 /**

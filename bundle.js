@@ -443,24 +443,36 @@
 	var domify = __webpack_require__(8)
 	var debounce = __webpack_require__(9)
 	var template = __webpack_require__(11)
+	var events = __webpack_require__(12)
 
+	/**
+	 * Init more with element(for insertAfter), callback ,and scrollable
+	 * Scrollable default to el.parentNode, could be window
+	 *
+	 * @param  {Element}  el
+	 * @param  {Function}  fn
+	 * @param {Element} scrollable
+	 * @api public
+	 */
 	function More(el, fn, scrollable) {
 	  if (!(this instanceof More)) return new More(el, fn, scrollable)
 	  this.el = el
 	  this.callback = fn
 	  this.div = domify(template)
 	  insertAfter(this.el, this.div)
-	  scrollable = scrollable || el.parentNode
-	  this.onscroll()
-	  var self = this
-	  scrollable.addEventListener('scroll', debounce(function () {
-	    self.onscroll()
-	  }), false)
+	  this.scrollable = scrollable = scrollable || el.parentNode
+	  this._onscroll = debounce(this.onscroll.bind(this), 100)
+	  events.bind(scrollable, 'scroll', this._onscroll)
 	}
 
-	More.prototype.onscroll = function () {
+	/**
+	 * On scroll event handler
+	 *
+	 * @api private
+	 */
+	More.prototype.onscroll = function (e) {
 	  if (this.loading || this._disabled) return
-	  if (!check(this.el)) return
+	  if (!check(this.scrollable) && e !== true) return
 	  this.div.style.display = 'block'
 	  // var h = computedStyle(this.el, 'height')
 	  this.loading = true
@@ -475,21 +487,63 @@
 	  }
 	}
 
+	/**
+	 * Disable loading more data
+	 *
+	 * @return {undefined}
+	 * @api public
+	 */
 	More.prototype.disable = function () {
 	  this._disabled = true
-	}
-
-	More.prototype.text = function (text) {
-	  this.div.querySelector('span').innerHTML = text
+	  this.div.style.display = 'none'
+	  this.loading = false
 	}
 
 	/**
-	 * check el is visible on viewport
+	 * Force more to start loading
+	 *
+	 * @return {undefined}
+	 * @api public
 	 */
-	function check(el) {
-	  var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-	  var bottom = el.getBoundingClientRect().bottom
-	  return bottom < vh
+	More.prototype.load = function () {
+	  this.onscroll(true)
+	}
+	/**
+	 * Set the loading text
+	 *
+	 * @param {String} text
+	 * @api public
+	 */
+	More.prototype.text = function (text) {
+	  this.div.querySelector('.more-text').innerHTML = text
+	}
+
+	/**
+	 * Remove the appended element and unbind event
+	 *
+	 * @return {undefined}
+	 * @api public
+	 */
+	More.prototype.remove = function () {
+	  events.unbind(this.scrollable, 'scroll', this._onscroll)
+	  this.div.parentNode.removeChild(this.div)
+	}
+
+	/**
+	 * check if scrollable scroll to end
+	 */
+	function check(scrollable) {
+	  if (scrollable === window) {
+	    // viewport height
+	    var supportPageOffset = window.pageXOffset !== undefined
+	    var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+	    var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+	    var scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
+	    if (getDocHeight() - vh == scrollY) return true
+	  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 1) {
+	    return true
+	  }
+	  return false
 	}
 
 	function insertAfter(referenceNode, newNode) {
@@ -499,6 +553,11 @@
 	  } else {
 	    referenceNode.parentNode.appendChild(newNode)
 	  }
+	}
+
+	function getDocHeight() {
+	    var D = document;
+	    return Math.max(D.body.scrollHeight, D.documentElement.scrollHeight);
 	}
 
 	module.exports = More
@@ -696,7 +755,47 @@
 /* 11 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh more-spin\"></i> <span>加载中...</span>\n</div>\n";
+	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh more-spin\"></i> <span class=\"more-text\">加载中...</span>\n</div>\n";
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',
+	    unbind = window.removeEventListener ? 'removeEventListener' : 'detachEvent',
+	    prefix = bind !== 'addEventListener' ? 'on' : '';
+
+	/**
+	 * Bind `el` event `type` to `fn`.
+	 *
+	 * @param {Element} el
+	 * @param {String} type
+	 * @param {Function} fn
+	 * @param {Boolean} capture
+	 * @return {Function}
+	 * @api public
+	 */
+
+	exports.bind = function(el, type, fn, capture){
+	  el[bind](prefix + type, fn, capture || false);
+	  return fn;
+	};
+
+	/**
+	 * Unbind `el` event `type`'s callback `fn`.
+	 *
+	 * @param {Element} el
+	 * @param {String} type
+	 * @param {Function} fn
+	 * @param {Boolean} capture
+	 * @return {Function}
+	 * @api public
+	 */
+
+	exports.unbind = function(el, type, fn, capture){
+	  el[unbind](prefix + type, fn, capture || false);
+	  return fn;
+	};
 
 /***/ }
 /******/ ]);

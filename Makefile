@@ -1,5 +1,5 @@
 dev:
-	@webpack example/index.js example/bundle.js --module-bind html --module-bind "css=style!css" --module-bind "png=url-loader?mimetype=image/png"
+	@webpack example/index.js example/bundle.js --module-bind html --module-bind "css=style!css" --module-bind "png=url-loader?mimetype=image/png" -w -d
 
 doc:
 	@webpack example/index.js example/bundle.js --module-bind html --module-bind "css=style!css" --module-bind "png=url-loader?mimetype=image/png"

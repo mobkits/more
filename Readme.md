@@ -1,5 +1,8 @@
 # More
 
+[![Build Status](https://secure.travis-ci.org/chemzqm/more.svg)](http://travis-ci.org/chemzqm/more)
+[![Coverage Status](https://coveralls.io/repos/chemzqm/more/badge.svg?branch=master&service=github)](https://coveralls.io/github/chemzqm/more?branch=master)
+
 Append more div the list element, check loading on scroll.
 
 [demo](http://chemzqm.github.io/more/)

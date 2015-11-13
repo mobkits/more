@@ -1,11 +1,10 @@
 var domify = require('domify')
-var throttle = require('throttleit')
+var debounce = require('debounce')
 var template = require('./template.html')
 var events = require('event')
 
 /**
  * Init more with element(for insertAfter), callback ,and scrollable
- * Scrollable default to el.parentNode, could be window
  *
  * @param  {Element}  el
  * @param  {Function}  fn
@@ -19,7 +18,7 @@ function More(el, fn, scrollable) {
   this.div = domify(template)
   insertAfter(this.el, this.div)
   this.scrollable = scrollable = scrollable || el.parentNode
-  this._onscroll = throttle(this.onscroll.bind(this), 100)
+  this._onscroll = debounce(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
 
@@ -30,7 +29,7 @@ function More(el, fn, scrollable) {
  */
 More.prototype.onscroll = function (e) {
   if (this.loading || this._disabled) return
-  if (!check(this.scrollable, this.delta || 10) && e !== true) return
+  if (!check(this.scrollable) && e !== true) return
   this.div.style.display = 'block'
   // var h = computedStyle(this.el, 'height')
   this.loading = true
@@ -90,15 +89,15 @@ More.prototype.remove = function () {
 /**
  * check if scrollable scroll to end
  */
-function check(scrollable, delta) {
+function check(scrollable) {
   if (scrollable === window) {
     // viewport height
     var supportPageOffset = window.pageXOffset !== undefined
     var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
     var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
     var scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
-    if (getDocHeight() - vh - scrollY < delta) return true
-  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < delta) {
+    if (getDocHeight() - vh == scrollY) return true
+  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 1) {
     return true
   }
   return false

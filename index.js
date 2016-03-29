@@ -1,3 +1,4 @@
+var ispinner = require('ispinner')
 var domify = require('domify')
 var debounce = require('debounce')
 var template = require('./template.html')
@@ -17,6 +18,7 @@ function More(el, fn, scrollable) {
   this.callback = fn
   this.div = domify(template)
   insertAfter(this.el, this.div)
+  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '14px'})
   this.scrollable = scrollable = scrollable || el.parentNode
   this._onscroll = debounce(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)
@@ -64,15 +66,6 @@ More.prototype.disable = function () {
  */
 More.prototype.load = function () {
   this.onscroll(true)
-}
-/**
- * Set the loading text
- *
- * @param {String} text
- * @api public
- */
-More.prototype.text = function (text) {
-  this.div.querySelector('.more-text').innerHTML = text
 }
 
 /**

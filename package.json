@@ -10,6 +10,7 @@
     "component-event": "^0.1.4",
     "debounce": "^1.0.0",
     "domify": "^1.4.0",
+    "ispinner": "0.0.2",
     "throttleit": "^1.0.0"
   },
   "devDependencies": {

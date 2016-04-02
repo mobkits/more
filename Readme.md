@@ -43,10 +43,6 @@ Insert `more` after list `el`, call the callback with a function when more div c
 
 scrollable is Object (could be element or other object) which emit `scroll` event, it default to `el.parentNode`, could also be `window`
 
-### .text(string)
-
-Set loading text.
-
 ### .disable()
 
 Disable more loading.

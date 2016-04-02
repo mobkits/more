@@ -18,7 +18,7 @@ function More(el, fn, scrollable) {
   this.callback = fn
   this.div = domify(template)
   insertAfter(this.el, this.div)
-  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '14px'})
+  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '20px'})
   this.scrollable = scrollable = scrollable || el.parentNode
   this._onscroll = debounce(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)

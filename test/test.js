@@ -191,17 +191,6 @@ describe('.disable()', function() {
   })
 })
 
-describe('.text()', function() {
-  it('should change text', function (done) {
-    var m = More(ul, function(cb){
-      cb()
-    }, scrollable)
-    m.text('loading')
-    assert(m.div.textContent.indexOf('loading') !== -1)
-    done()
-  })
-})
-
 describe('.remove()', function() {
   it('should unbind event listeners', function (done) {
     var fired

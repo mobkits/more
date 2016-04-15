@@ -3,6 +3,8 @@ var domify = require('domify')
 var debounce = require('debounce')
 var template = require('./template.html')
 var events = require('event')
+var supportPageOffset = window.pageXOffset !== undefined
+var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
 
 /**
  * Init more with element(for insertAfter), callback ,and scrollable
@@ -18,7 +20,7 @@ function More(el, fn, scrollable) {
   this.callback = fn
   this.div = domify(template)
   insertAfter(this.el, this.div)
-  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '20px'})
+  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '22px'})
   this.scrollable = scrollable = scrollable || el.parentNode
   this._onscroll = debounce(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)
@@ -32,13 +34,13 @@ function More(el, fn, scrollable) {
 More.prototype.onscroll = function (e) {
   if (this.loading || this._disabled) return
   if (!check(this.scrollable) && e !== true) return
-  this.div.style.display = 'block'
+  this.div.style.visibility = 'visible'
   // var h = computedStyle(this.el, 'height')
   this.loading = true
   var self = this
   var cb = function () {
     self.loading = false
-    self.div.style.display = 'none'
+    self.div.style.visibility = 'hidden'
   }
   var res = this.callback(cb)
   if (res && typeof res.then === 'function') {
@@ -85,8 +87,6 @@ More.prototype.remove = function () {
 function check(scrollable) {
   if (scrollable === window) {
     // viewport height
-    var supportPageOffset = window.pageXOffset !== undefined
-    var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
     var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
     var scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
     if (getDocHeight() - vh == scrollY) return true

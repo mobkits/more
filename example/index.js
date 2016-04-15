@@ -12,7 +12,7 @@ var m = more(el, function() {
         append(5)
       }
     resolve()
-    }, 3000)
+    }, 1000)
   })
 })
 

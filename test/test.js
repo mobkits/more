@@ -71,7 +71,7 @@ describe('onscroll', function () {
     scrollable.scrollTop = scrollable.scrollHeight
     setTimeout(function () {
       assert.equal(fired, true)
-      assert.equal(m.div.style.display, 'block')
+      assert.equal(m.div.style.visibility, 'visible')
       m.remove()
       done()
     }, 200)
@@ -98,7 +98,7 @@ describe('onscroll', function () {
     }, scrollable)
     scrollable.scrollTop = scrollable.scrollHeight
     setTimeout(function () {
-      assert.equal(m.div.style.display, 'none')
+      assert.equal(m.div.style.visibility, 'hidden')
       done()
     }, 200)
   })
@@ -111,7 +111,7 @@ describe('onscroll', function () {
     }, scrollable)
     scrollable.scrollTop = scrollable.scrollHeight
     setTimeout(function () {
-      assert.equal(m.div.style.display, 'none')
+      assert.equal(m.div.style.visibility, 'hidden')
       done()
     }, 200)
   })
@@ -124,7 +124,7 @@ describe('onscroll', function () {
     }, scrollable)
     scrollable.scrollTop = scrollable.scrollHeight
     setTimeout(function () {
-      assert.equal(m.div.style.display, 'none')
+      assert.equal(m.div.style.visibility, 'hidden')
       done()
     }, 200)
   })

@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1)
-	var more = __webpack_require__(7);
+	var more = __webpack_require__(5);
 	var el = document.querySelector('ul');
 	var times = 0;
 	var m = more(el, function() {
@@ -58,7 +58,7 @@
 	        append(5)
 	      }
 	    resolve()
-	    }, 3000)
+	    }, 1000)
 	  })
 	})
 
@@ -84,7 +84,7 @@
 	var content = __webpack_require__(2);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(6)(content, {});
+	var update = __webpack_require__(4)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -109,7 +109,7 @@
 
 
 	// module
-	exports.push([module.id, ".more-loading {\n  margin: 10px 0;\n  padding: 0 10px;\n  font-size: 14px;\n  font-weight: 300;\n  font-family: sans-serif;\n  text-align: center;\n  color: #999;\n  display: none;\n  height: 22px;\n}\n\n.more-loading .more-refresh {\n  background: url(" + __webpack_require__(4) + ") no-repeat;\n  height: 14px;\n  width: 14px;\n  display: inline-block;\n  vertical-align: middle;\n}\n\n.more-loading .more-spin {\n  -webkit-animation: more-spin 2s infinite linear;\n  animation: more-spin 2s infinite linear;\n  display: inline-block;\n}\n\n@media all and (-webkit-min-device-pixel-ratio: 1.5) {\n  .more-loading .more-refresh {\n    background: url(" + __webpack_require__(5) + ") no-repeat;\n    -webkit-background-size: contain;\n    background-size: contain;\n  }\n}\n\n@keyframes more-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n    transform: rotate(0deg);\n  }\n\n  100% {\n    -webkit-transform: rotate(359deg);\n    transform: rotate(359deg);\n  }\n}\n", ""]);
+	exports.push([module.id, ".more-loading {\n  margin: 10px 0;\n  padding: 0 10px;\n  font-size: 14px;\n  font-weight: 300;\n  font-family: sans-serif;\n  text-align: center;\n  color: #999;\n  visibility: hidden;\n  height: 22px;\n}\n\n.more-loading .more-refresh {\n  height: 14px;\n  width: 14px;\n  display: inline-block;\n  vertical-align: middle;\n}\n", ""]);
 
 	// exports
 
@@ -172,18 +172,6 @@
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
-
-	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAQAAAC1QeVaAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAFiUAABYlAUlSJPAAAAD5SURBVBjTXcg9K4VhAADQ816Pz+5AkpQFSUr+gEJZDTbl/oA3E5OUyWCwmD1YMEgZDDYlw5WJshgw0BW3i8GifL1sxBlPApFEs37datw4VWPciqeESJ0xk3p9IVHyKmfUY4g0mDHtwqJz70ZMqXcCAQXTdswrodmYB9UqMpLYadeDgnIqUqsFvHmUBUPaLSlDyqtbP4IeH85If08kb9BtsOfStf86LNsMaVHx70fok1cKkSptavHhznsKTSZUHObQZN2RfQVVRBrNGrbqIiCnRat7FZ1y+hQM27AmC0i8ONBqQeZLtbI5655TAZ+2bMsb0OXTlWPXshTfSUZN5aSoWFkAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNC40LjI5PmtDvAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNC0wNS0yMFQxOToyOTozNSswODowMGuOqIwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDUtMjBUMTU6NDI6NTArMDg6MDAEa75fAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAAABJRU5ErkJggg=="
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAABd0RVh0Q3JlYXRpb24gVGltZQAyMDE0LjQuMjk+a0O8AAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAAmVJREFUSIm91k+oVVUUx/HPUSkos1KEwAeVoxAzSiWpgWDQJEFJbFIOGq0nOlSTHIgOH0k2ibeaNXpIVIhSwYMXkYlFNIpykqgUDnQiamKop8E5F/f7c/88ercfbFj89t7ru7l3nb22uq4NQ5n5eGYeaWOZqa5rSwbZPD4+XlVVtQGbsBZPtuMaLuInTEXE9RYwgq9wHYfLXD2BmbkUu7EHT/c5153MPIkv8AFGcGbmoq7AzHwNn2JVH1BHD+OtdnTVLGD7872Po1hUTN3EJH7BFdzBCqzB63hmkFPNAlZVNYZ9hXWjhY9HxM25kmTmC/gBj84LmJnvzoCdxa6IuNAtQWZu0hRIX9g0YGY+i4+KuSlsjYjbPWBbcBJLB4FNA+IYHmvjy3izFwwiYqrYM5AWtSddjW2Fv7vzTS20OlW4s4h/q+v662HASuCWwpsYHR0dzn1XANcV3tlhwXhQNCsK76+FSp6ZT+BgYR3sAH/GQ228kMWyHO/NAkbEKwsIKfVUEV9l+l05DL1UxBf+D+COIv5+qMDMXI/NhTXBHN0iM5dhcY9ctyLinz6wxUhUrXVO09bmbMBn8HyXXN9hK3oCNR1/fRvfV3Sggd40rSaxPSL+7rYgM5fgQ+wt7OOaXjkv4CS29WlVL+JjzUOro1M4UK4bFPgqPsnMb/A7/tT8zyN4Gds193FV7PlW07zvZea8gY/gnXb0012M4XBE3J052Qt4Ap9jPzYOALqP0zgUEb92W9QNeAJvR8Q9fJaZz+ENzXe1Gis1lXoFf+BHfBkRl/qdai7gBMZaGIiI8ziveYb8J/0LrZ6vNaZkKKgAAAAASUVORK5CYII="
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -437,17 +425,19 @@
 
 
 /***/ },
-/* 7 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var domify = __webpack_require__(8)
-	var debounce = __webpack_require__(9)
-	var template = __webpack_require__(11)
-	var events = __webpack_require__(12)
+	var ispinner = __webpack_require__(6)
+	var domify = __webpack_require__(7)
+	var debounce = __webpack_require__(11)
+	var template = __webpack_require__(13)
+	var events = __webpack_require__(14)
+	var supportPageOffset = window.pageXOffset !== undefined
+	var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
 
 	/**
 	 * Init more with element(for insertAfter), callback ,and scrollable
-	 * Scrollable default to el.parentNode, could be window
 	 *
 	 * @param  {Element}  el
 	 * @param  {Function}  fn
@@ -460,6 +450,7 @@
 	  this.callback = fn
 	  this.div = domify(template)
 	  insertAfter(this.el, this.div)
+	  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '22px'})
 	  this.scrollable = scrollable = scrollable || el.parentNode
 	  this._onscroll = debounce(this.onscroll.bind(this), 100)
 	  events.bind(scrollable, 'scroll', this._onscroll)
@@ -473,13 +464,13 @@
 	More.prototype.onscroll = function (e) {
 	  if (this.loading || this._disabled) return
 	  if (!check(this.scrollable) && e !== true) return
-	  this.div.style.display = 'block'
+	  this.div.style.visibility = 'visible'
 	  // var h = computedStyle(this.el, 'height')
 	  this.loading = true
 	  var self = this
 	  var cb = function () {
 	    self.loading = false
-	    self.div.style.display = 'none'
+	    self.div.style.visibility = 'hidden'
 	  }
 	  var res = this.callback(cb)
 	  if (res && typeof res.then === 'function') {
@@ -508,15 +499,6 @@
 	More.prototype.load = function () {
 	  this.onscroll(true)
 	}
-	/**
-	 * Set the loading text
-	 *
-	 * @param {String} text
-	 * @api public
-	 */
-	More.prototype.text = function (text) {
-	  this.div.querySelector('.more-text').innerHTML = text
-	}
 
 	/**
 	 * Remove the appended element and unbind event
@@ -535,8 +517,6 @@
 	function check(scrollable) {
 	  if (scrollable === window) {
 	    // viewport height
-	    var supportPageOffset = window.pageXOffset !== undefined
-	    var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
 	    var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 	    var scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
 	    if (getDocHeight() - vh == scrollY) return true
@@ -564,7 +544,35 @@
 
 
 /***/ },
-/* 8 */
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var domify = __webpack_require__(7)
+	var template = __webpack_require__(8)
+	var classes = __webpack_require__(9)
+
+	module.exports = function (parent, opt) {
+	  var el = domify(template)
+	  opt = opt || {}
+	  if (!opt.white) {
+	    classes(el).add('ispinner-gray')
+	  } else {
+	    classes(el).add('ispinner-white')
+	  }
+	  if (opt.width) {
+	    el.style.width = opt.width
+	  } else {
+	    el.style.width =  parent.getBoundingClientRect().width + 'px'
+	  }
+	  el.style.height = el.style.width
+	  parent.appendChild(el)
+	  return el
+	}
+
+
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	
@@ -682,7 +690,218 @@
 
 
 /***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"ispinner ispinner-animating\">\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n</div>\n";
+
+/***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Module dependencies.
+	 */
+
+	var index = __webpack_require__(10);
+
+	/**
+	 * Whitespace regexp.
+	 */
+
+	var re = /\s+/;
+
+	/**
+	 * toString reference.
+	 */
+
+	var toString = Object.prototype.toString;
+
+	/**
+	 * Wrap `el` in a `ClassList`.
+	 *
+	 * @param {Element} el
+	 * @return {ClassList}
+	 * @api public
+	 */
+
+	module.exports = function(el){
+	  return new ClassList(el);
+	};
+
+	/**
+	 * Initialize a new ClassList for `el`.
+	 *
+	 * @param {Element} el
+	 * @api private
+	 */
+
+	function ClassList(el) {
+	  if (!el || !el.nodeType) {
+	    throw new Error('A DOM element reference is required');
+	  }
+	  this.el = el;
+	  this.list = el.classList;
+	}
+
+	/**
+	 * Add class `name` if not already present.
+	 *
+	 * @param {String} name
+	 * @return {ClassList}
+	 * @api public
+	 */
+
+	ClassList.prototype.add = function(name){
+	  // classList
+	  if (this.list) {
+	    this.list.add(name);
+	    return this;
+	  }
+
+	  // fallback
+	  var arr = this.array();
+	  var i = index(arr, name);
+	  if (!~i) arr.push(name);
+	  this.el.className = arr.join(' ');
+	  return this;
+	};
+
+	/**
+	 * Remove class `name` when present, or
+	 * pass a regular expression to remove
+	 * any which match.
+	 *
+	 * @param {String|RegExp} name
+	 * @return {ClassList}
+	 * @api public
+	 */
+
+	ClassList.prototype.remove = function(name){
+	  if ('[object RegExp]' == toString.call(name)) {
+	    return this.removeMatching(name);
+	  }
+
+	  // classList
+	  if (this.list) {
+	    this.list.remove(name);
+	    return this;
+	  }
+
+	  // fallback
+	  var arr = this.array();
+	  var i = index(arr, name);
+	  if (~i) arr.splice(i, 1);
+	  this.el.className = arr.join(' ');
+	  return this;
+	};
+
+	/**
+	 * Remove all classes matching `re`.
+	 *
+	 * @param {RegExp} re
+	 * @return {ClassList}
+	 * @api private
+	 */
+
+	ClassList.prototype.removeMatching = function(re){
+	  var arr = this.array();
+	  for (var i = 0; i < arr.length; i++) {
+	    if (re.test(arr[i])) {
+	      this.remove(arr[i]);
+	    }
+	  }
+	  return this;
+	};
+
+	/**
+	 * Toggle class `name`, can force state via `force`.
+	 *
+	 * For browsers that support classList, but do not support `force` yet,
+	 * the mistake will be detected and corrected.
+	 *
+	 * @param {String} name
+	 * @param {Boolean} force
+	 * @return {ClassList}
+	 * @api public
+	 */
+
+	ClassList.prototype.toggle = function(name, force){
+	  // classList
+	  if (this.list) {
+	    if ("undefined" !== typeof force) {
+	      if (force !== this.list.toggle(name, force)) {
+	        this.list.toggle(name); // toggle again to correct
+	      }
+	    } else {
+	      this.list.toggle(name);
+	    }
+	    return this;
+	  }
+
+	  // fallback
+	  if ("undefined" !== typeof force) {
+	    if (!force) {
+	      this.remove(name);
+	    } else {
+	      this.add(name);
+	    }
+	  } else {
+	    if (this.has(name)) {
+	      this.remove(name);
+	    } else {
+	      this.add(name);
+	    }
+	  }
+
+	  return this;
+	};
+
+	/**
+	 * Return an array of classes.
+	 *
+	 * @return {Array}
+	 * @api public
+	 */
+
+	ClassList.prototype.array = function(){
+	  var className = this.el.getAttribute('class') || '';
+	  var str = className.replace(/^\s+|\s+$/g, '');
+	  var arr = str.split(re);
+	  if ('' === arr[0]) arr.shift();
+	  return arr;
+	};
+
+	/**
+	 * Check if class `name` is present.
+	 *
+	 * @param {String} name
+	 * @return {ClassList}
+	 * @api public
+	 */
+
+	ClassList.prototype.has =
+	ClassList.prototype.contains = function(name){
+	  return this.list
+	    ? this.list.contains(name)
+	    : !! ~index(this.array(), name);
+	};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = function(arr, obj){
+	  if (arr.indexOf) return arr.indexOf(obj);
+	  for (var i = 0; i < arr.length; ++i) {
+	    if (arr[i] === obj) return i;
+	  }
+	  return -1;
+	};
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -690,7 +909,7 @@
 	 * Module dependencies.
 	 */
 
-	var now = __webpack_require__(10);
+	var now = __webpack_require__(12);
 
 	/**
 	 * Returns a function, that, as long as it continues to be invoked, will not
@@ -741,7 +960,7 @@
 
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = Date.now || now
@@ -752,13 +971,13 @@
 
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh more-spin\"></i> <span class=\"more-text\">加载中...</span>\n</div>\n";
+	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh\"></i>\n</div>\n";
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports) {
 
 	var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',

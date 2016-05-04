@@ -7,9 +7,11 @@
     "example": "example"
   },
   "dependencies": {
+    "component-emitter": "^1.2.1",
     "component-event": "^0.1.4",
     "debounce": "^1.0.0",
     "domify": "^1.4.0",
+    "iscroll-component": "^1.6.2",
     "ispinner": "0.0.2",
     "page-offset": "0.0.3",
     "throttleit": "^1.0.0"
@@ -54,6 +56,8 @@
   },
   "homepage": "https://github.com/chemzqm/more#readme",
   "browser": {
-    "event": "component-event"
+    "event": "component-event",
+    "iscroll": "iscroll-component",
+    "emitter": "component-emitter"
   }
 }

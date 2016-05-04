@@ -4,13 +4,14 @@ var domify = require('domify')
 var debounce = require('debounce')
 var template = require('./template.html')
 var events = require('event')
+var Emitter = require('emitter')
 
 /**
  * Init more with element(for insertAfter), callback ,and scrollable
  *
- * @param  {Element}  el
- * @param  {Function}  fn
- * @param {Element} scrollable
+ * @param {Function} fn
+ * @param {Element}  el
+ * @param {Element}  scrollable
  * @api public
  */
 function More(el, fn, scrollable) {
@@ -20,10 +21,13 @@ function More(el, fn, scrollable) {
   this.div = domify(template)
   insertAfter(this.el, this.div)
   this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '20px'})
-  this.scrollable = scrollable || el.parentNode
+  scrollable = scrollable || el.parentNode
+  this.scrollable = scrollable
   this._onscroll = debounce(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
+
+Emitter(More.prototype)
 
 /**
  * On scroll event handler
@@ -40,6 +44,9 @@ More.prototype.onscroll = function (e) {
   var cb = function () {
     self.loading = false
     self.div.style.visibility = 'hidden'
+    setTimeout(function () {
+      self.emit('load')
+    }, 20)
   }
   var res = this.callback(cb)
   if (res && typeof res.then === 'function') {

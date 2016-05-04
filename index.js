@@ -1,4 +1,9 @@
 require('../more.css')
+var Iscroll = require('iscroll')
+var is = new Iscroll(document.querySelector('.scrollable'), {
+  handlebar: true
+})
+
 var more = require('..');
 var el = document.querySelector('ul');
 var times = 0;
@@ -14,7 +19,8 @@ var m = more(el, function() {
     resolve()
     }, 1000)
   })
-})
+}, document.querySelector('.scrollable'))
+m.on('load', is.refresh.bind(is))
 
 
 var i = 0

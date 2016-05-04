@@ -1,10 +1,9 @@
+var offset = require('page-offset')
 var ispinner = require('ispinner')
 var domify = require('domify')
 var debounce = require('debounce')
 var template = require('./template.html')
 var events = require('event')
-var supportPageOffset = window.pageXOffset !== undefined
-var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
 
 /**
  * Init more with element(for insertAfter), callback ,and scrollable
@@ -20,8 +19,8 @@ function More(el, fn, scrollable) {
   this.callback = fn
   this.div = domify(template)
   insertAfter(this.el, this.div)
-  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '22px'})
-  this.scrollable = scrollable = scrollable || el.parentNode
+  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '20px'})
+  this.scrollable = scrollable || el.parentNode
   this._onscroll = debounce(this.onscroll.bind(this), 100)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
@@ -88,9 +87,8 @@ function check(scrollable) {
   if (scrollable === window) {
     // viewport height
     var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-    var scrollY = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
-    if (getDocHeight() - vh == scrollY) return true
-  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 1) {
+    if (getDocHeight() - vh == offset.y) return true
+  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 20) {
     return true
   }
   return false

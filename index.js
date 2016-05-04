@@ -23,7 +23,7 @@ function More(el, fn, scrollable) {
   this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '20px'})
   scrollable = scrollable || el.parentNode
   this.scrollable = scrollable
-  this._onscroll = debounce(this.onscroll.bind(this), 100)
+  this._onscroll = debounce(this.onscroll.bind(this), 10)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
 

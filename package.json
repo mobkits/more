@@ -11,12 +11,12 @@
     "component-event": "^0.1.4",
     "debounce": "^1.0.0",
     "domify": "^1.4.0",
-    "iscroll-component": "^1.6.2",
     "ispinner": "0.0.2",
     "page-offset": "0.0.3",
     "throttleit": "^1.0.0"
   },
   "devDependencies": {
+    "iscroll-component": "^1.6.2",
     "coveralls": "^2.11.4",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.4",
@@ -58,6 +58,7 @@
   "browser": {
     "event": "component-event",
     "iscroll": "iscroll-component",
-    "emitter": "component-emitter"
+    "emitter": "component-emitter",
+    "closest": "component-closest"
   }
 }

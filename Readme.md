@@ -17,6 +17,10 @@ Install with [component(1)](http://component.io):
 
     $ component install chemzqm/more
 
+## Events
+
+* `load` is emitted after callback called.
+
 ## API
 
 ```js

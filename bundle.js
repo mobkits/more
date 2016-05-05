@@ -555,14 +555,13 @@
 	Iscroll.prototype.refresh = function(noscroll) {
 	  var vh = this.viewHeight = this.scrollable.getBoundingClientRect().height
 	  var ch = this.el.getBoundingClientRect().height
-	  var h = Math.max(vh, height(this.el))
+	  // at least clientHeight
+	  var h = this.height = Math.max(vh, height(this.el))
+	  this.minY = min(0, vh - h)
+	  // only change height when needed
 	  if (ch !== h) {
 	    this.el.style.height = h + 'px'
-	    this.height = h
-	  } else {
-	    this.height = h
 	  }
-	  this.minY = min(0, vh - this.height)
 	  if (noscroll === true) return
 	  if (this.y < this.minY) {
 	    this.scrollTo(this.minY, 300)
@@ -593,6 +592,7 @@
 	  if (y > 0) y = 0
 	  if (y < this.minY) y = this.minY
 	  if (y === this.y) return
+	  this.refresh(true)
 	  this.scrollTo(y, 20, 'linear')
 	}
 
@@ -2687,7 +2687,7 @@
 	var debounce = __webpack_require__(28)
 	var template = __webpack_require__(42)
 	var events = __webpack_require__(16)
-	var Emitter = __webpack_require__(43)
+	var Emitter = __webpack_require__(14)
 
 	/**
 	 * Init more with element(for insertAfter), callback ,and scrollable
@@ -2774,6 +2774,9 @@
 	 * check if scrollable scroll to end
 	 */
 	function check(scrollable) {
+	  console.log(scrollable.scrollTop)
+	  //console.log(scrollable.scrollHeight)
+	  //console.log(scrollable.clientHeight)
 	  if (scrollable === window) {
 	    // viewport height
 	    var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
@@ -3184,175 +3187,6 @@
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh\"></i>\n</div>\n";
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * Expose `Emitter`.
-	 */
-
-	if (true) {
-	  module.exports = Emitter;
-	}
-
-	/**
-	 * Initialize a new `Emitter`.
-	 *
-	 * @api public
-	 */
-
-	function Emitter(obj) {
-	  if (obj) return mixin(obj);
-	};
-
-	/**
-	 * Mixin the emitter properties.
-	 *
-	 * @param {Object} obj
-	 * @return {Object}
-	 * @api private
-	 */
-
-	function mixin(obj) {
-	  for (var key in Emitter.prototype) {
-	    obj[key] = Emitter.prototype[key];
-	  }
-	  return obj;
-	}
-
-	/**
-	 * Listen on the given `event` with `fn`.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-
-	Emitter.prototype.on =
-	Emitter.prototype.addEventListener = function(event, fn){
-	  this._callbacks = this._callbacks || {};
-	  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
-	    .push(fn);
-	  return this;
-	};
-
-	/**
-	 * Adds an `event` listener that will be invoked a single
-	 * time then automatically removed.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-
-	Emitter.prototype.once = function(event, fn){
-	  function on() {
-	    this.off(event, on);
-	    fn.apply(this, arguments);
-	  }
-
-	  on.fn = fn;
-	  this.on(event, on);
-	  return this;
-	};
-
-	/**
-	 * Remove the given callback for `event` or all
-	 * registered callbacks.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-
-	Emitter.prototype.off =
-	Emitter.prototype.removeListener =
-	Emitter.prototype.removeAllListeners =
-	Emitter.prototype.removeEventListener = function(event, fn){
-	  this._callbacks = this._callbacks || {};
-
-	  // all
-	  if (0 == arguments.length) {
-	    this._callbacks = {};
-	    return this;
-	  }
-
-	  // specific event
-	  var callbacks = this._callbacks['$' + event];
-	  if (!callbacks) return this;
-
-	  // remove all handlers
-	  if (1 == arguments.length) {
-	    delete this._callbacks['$' + event];
-	    return this;
-	  }
-
-	  // remove specific handler
-	  var cb;
-	  for (var i = 0; i < callbacks.length; i++) {
-	    cb = callbacks[i];
-	    if (cb === fn || cb.fn === fn) {
-	      callbacks.splice(i, 1);
-	      break;
-	    }
-	  }
-	  return this;
-	};
-
-	/**
-	 * Emit `event` with the given args.
-	 *
-	 * @param {String} event
-	 * @param {Mixed} ...
-	 * @return {Emitter}
-	 */
-
-	Emitter.prototype.emit = function(event){
-	  this._callbacks = this._callbacks || {};
-	  var args = [].slice.call(arguments, 1)
-	    , callbacks = this._callbacks['$' + event];
-
-	  if (callbacks) {
-	    callbacks = callbacks.slice(0);
-	    for (var i = 0, len = callbacks.length; i < len; ++i) {
-	      callbacks[i].apply(this, args);
-	    }
-	  }
-
-	  return this;
-	};
-
-	/**
-	 * Return array of callbacks for `event`.
-	 *
-	 * @param {String} event
-	 * @return {Array}
-	 * @api public
-	 */
-
-	Emitter.prototype.listeners = function(event){
-	  this._callbacks = this._callbacks || {};
-	  return this._callbacks['$' + event] || [];
-	};
-
-	/**
-	 * Check if this emitter has `event` handlers.
-	 *
-	 * @param {String} event
-	 * @return {Boolean}
-	 * @api public
-	 */
-
-	Emitter.prototype.hasListeners = function(event){
-	  return !! this.listeners(event).length;
-	};
-
 
 /***/ }
 /******/ ]);

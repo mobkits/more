@@ -16,11 +16,11 @@
     "throttleit": "^1.0.0"
   },
   "devDependencies": {
-    "iscroll-component": "^1.6.2",
     "coveralls": "^2.11.4",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.4",
     "html-loader": "^0.4.3",
+    "iscroll-component": "^1.6.3",
     "istanbul": "^0.4.0",
     "istanbul-instrumenter-loader": "^0.2.0",
     "karma": "^0.13.15",

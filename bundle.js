@@ -2774,9 +2774,6 @@
 	 * check if scrollable scroll to end
 	 */
 	function check(scrollable) {
-	  console.log(scrollable.scrollTop)
-	  //console.log(scrollable.scrollHeight)
-	  //console.log(scrollable.clientHeight)
 	  if (scrollable === window) {
 	    // viewport height
 	    var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)

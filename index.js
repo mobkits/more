@@ -1,29 +1,32 @@
-var offset = require('page-offset')
 var ispinner = require('ispinner')
 var domify = require('domify')
 var debounce = require('debounce')
 var template = require('./template.html')
 var events = require('event')
 var Emitter = require('emitter')
+var computedStyle = require('computed-style')
 
 /**
  * Init more with element(for insertAfter), callback ,and scrollable
  *
- * @param {Function} fn
+ * @param {Function} fn callback function that should return promise
  * @param {Element}  el
- * @param {Element}  scrollable
+ * @param {Element}  scrollable [optional] default to el.parentNode
  * @api public
  */
 function More(el, fn, scrollable) {
   if (!(this instanceof More)) return new More(el, fn, scrollable)
   this.el = el
+  var display = computedStyle(el, 'display')
+  if (/inline/.test(display)) throw new Error('root element should not inline styled ' + el)
+  this.paddingBottom = parseInt(computedStyle(el, 'padding-bottom'), 10)
   this.callback = fn
   this.div = domify(template)
   insertAfter(this.el, this.div)
   this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '20px'})
   scrollable = scrollable || el.parentNode
   this.scrollable = scrollable
-  this._onscroll = debounce(this.onscroll.bind(this), 10)
+  this._onscroll = debounce(this.onscroll.bind(this), 16)
   events.bind(scrollable, 'scroll', this._onscroll)
 }
 
@@ -36,7 +39,7 @@ Emitter(More.prototype)
  */
 More.prototype.onscroll = function (e) {
   if (this.loading || this._disabled) return
-  if (!check(this.scrollable) && e !== true) return
+  if (!check(this.el, this.scrollable, this.paddingBottom) && e !== true) return
   this.div.style.visibility = 'visible'
   // var h = computedStyle(this.el, 'height')
   this.loading = true
@@ -90,13 +93,16 @@ More.prototype.remove = function () {
 /**
  * check if scrollable scroll to end
  */
-function check(scrollable) {
+function check(el, scrollable, pb) {
+  var rect = el.getBoundingClientRect()
+  var dis = rect.top + el.clientHeight - pb
   if (scrollable === window) {
     // viewport height
     var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-    if (getDocHeight() - vh == offset.y) return true
-  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 20) {
-    return true
+    if (dis <= vh) return true
+  } else {
+    var sh = scrollable.getBoundingClientRect().top + scrollable.clientHeight
+    if (dis <= sh) return true
   }
   return false
 }
@@ -108,11 +114,6 @@ function insertAfter(referenceNode, newNode) {
   } else {
     referenceNode.parentNode.appendChild(newNode)
   }
-}
-
-function getDocHeight() {
-    var D = document;
-    return Math.max(D.body.scrollHeight, D.documentElement.scrollHeight);
 }
 
 module.exports = More

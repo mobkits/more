@@ -76,6 +76,7 @@ More.prototype.disable = function () {
 More.prototype.enable = function () {
   this._disabled = false
   this.div.style.display = 'block'
+  this.div.style.visibility = 'hidden'
   this.loading = false
 }
 

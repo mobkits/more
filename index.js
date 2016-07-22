@@ -60,12 +60,22 @@ More.prototype.onscroll = function (e) {
 /**
  * Disable loading more data
  *
- * @return {undefined}
  * @api public
  */
 More.prototype.disable = function () {
   this._disabled = true
   this.div.style.display = 'none'
+  this.loading = false
+}
+
+/**
+ * Enable for loading more data
+ *
+ * @public
+ */
+More.prototype.enable = function () {
+  this._disabled = false
+  this.div.style.display = 'block'
   this.loading = false
 }
 

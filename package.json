@@ -1,6 +1,6 @@
 {
   "name": "more-mobile",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "do something when element scroll to end",
   "main": "index.js",
   "directories": {

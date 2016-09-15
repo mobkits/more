@@ -1,4 +1,4 @@
-require('../more.css')
+require('../style.css')
 var Iscroll = require('iscroll')
 var is = new Iscroll(document.querySelector('.scrollable'), {
   handlebar: true

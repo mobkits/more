@@ -55,6 +55,7 @@
     "url": "https://github.com/chemzqm/more/issues"
   },
   "homepage": "https://github.com/chemzqm/more#readme",
+  "style": "style.css",
   "browser": {
     "event": "component-event",
     "iscroll": "iscroll-component",

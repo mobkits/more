@@ -17,8 +17,6 @@ var computedStyle = require('computed-style')
 function More(el, fn, scrollable) {
   if (!(this instanceof More)) return new More(el, fn, scrollable)
   this.el = el
-  var display = computedStyle(el, 'display')
-  if (/inline/.test(display)) throw new Error('root element should not inline styled ' + el)
   this.paddingBottom = parseInt(computedStyle(el, 'padding-bottom'), 10)
   this.callback = fn
   this.div = domify(template)

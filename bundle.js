@@ -44,13 +44,13 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1)
-	var Iscroll = __webpack_require__(5)
+	__webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../more.css\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()))
+	var Iscroll = __webpack_require__(1)
 	var is = new Iscroll(document.querySelector('.scrollable'), {
 	  handlebar: true
 	})
 
-	var more = __webpack_require__(35);
+	var more = __webpack_require__(31);
 	var el = document.querySelector('ul');
 	var times = 0;
 	var m = more(el, function() {
@@ -84,368 +84,18 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(2);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./node_modules/css-loader/index.js!./more.css", function() {
-				var newContent = require("!!./node_modules/css-loader/index.js!./more.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(3)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".more-loading {\n  margin: 10px 0;\n  padding: 0 10px;\n  font-size: 14px;\n  font-weight: 300;\n  font-family: sans-serif;\n  text-align: center;\n  color: #999;\n  visibility: hidden;\n  height: 22px;\n}\n\n.more-loading .more-refresh {\n  height: 14px;\n  width: 14px;\n  display: inline-block;\n  vertical-align: middle;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	// css base code, injected by the css-loader
-	module.exports = function() {
-		var list = [];
-
-		// return the list of modules as css string
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-
-		// import a list of modules into the list
-		list.i = function(modules, mediaQuery) {
-			if(typeof modules === "string")
-				modules = [[null, modules, ""]];
-			var alreadyImportedModules = {};
-			for(var i = 0; i < this.length; i++) {
-				var id = this[i][0];
-				if(typeof id === "number")
-					alreadyImportedModules[id] = true;
-			}
-			for(i = 0; i < modules.length; i++) {
-				var item = modules[i];
-				// skip already imported module
-				// this implementation is not 100% perfect for weird media query combinations
-				//  when a module is imported multiple times with different media queries.
-				//  I hope this will never occur (Hey this way we have smaller bundles)
-				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-					if(mediaQuery && !item[2]) {
-						item[2] = mediaQuery;
-					} else if(mediaQuery) {
-						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-					}
-					list.push(item);
-				}
-			}
-		};
-		return list;
-	};
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-		MIT License http://www.opensource.org/licenses/mit-license.php
-		Author Tobias Koppers @sokra
-	*/
-	var stylesInDom = {},
-		memoize = function(fn) {
-			var memo;
-			return function () {
-				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
-				return memo;
-			};
-		},
-		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
-		}),
-		getHeadElement = memoize(function () {
-			return document.head || document.getElementsByTagName("head")[0];
-		}),
-		singletonElement = null,
-		singletonCounter = 0,
-		styleElementsInsertedAtTop = [];
-
-	module.exports = function(list, options) {
-		if(false) {
-			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
-		}
-
-		options = options || {};
-		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-		// tags it will allow on a page
-		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
-
-		// By default, add <style> tags to the bottom of <head>.
-		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
-
-		var styles = listToStyles(list);
-		addStylesToDom(styles, options);
-
-		return function update(newList) {
-			var mayRemove = [];
-			for(var i = 0; i < styles.length; i++) {
-				var item = styles[i];
-				var domStyle = stylesInDom[item.id];
-				domStyle.refs--;
-				mayRemove.push(domStyle);
-			}
-			if(newList) {
-				var newStyles = listToStyles(newList);
-				addStylesToDom(newStyles, options);
-			}
-			for(var i = 0; i < mayRemove.length; i++) {
-				var domStyle = mayRemove[i];
-				if(domStyle.refs === 0) {
-					for(var j = 0; j < domStyle.parts.length; j++)
-						domStyle.parts[j]();
-					delete stylesInDom[domStyle.id];
-				}
-			}
-		};
-	}
-
-	function addStylesToDom(styles, options) {
-		for(var i = 0; i < styles.length; i++) {
-			var item = styles[i];
-			var domStyle = stylesInDom[item.id];
-			if(domStyle) {
-				domStyle.refs++;
-				for(var j = 0; j < domStyle.parts.length; j++) {
-					domStyle.parts[j](item.parts[j]);
-				}
-				for(; j < item.parts.length; j++) {
-					domStyle.parts.push(addStyle(item.parts[j], options));
-				}
-			} else {
-				var parts = [];
-				for(var j = 0; j < item.parts.length; j++) {
-					parts.push(addStyle(item.parts[j], options));
-				}
-				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
-			}
-		}
-	}
-
-	function listToStyles(list) {
-		var styles = [];
-		var newStyles = {};
-		for(var i = 0; i < list.length; i++) {
-			var item = list[i];
-			var id = item[0];
-			var css = item[1];
-			var media = item[2];
-			var sourceMap = item[3];
-			var part = {css: css, media: media, sourceMap: sourceMap};
-			if(!newStyles[id])
-				styles.push(newStyles[id] = {id: id, parts: [part]});
-			else
-				newStyles[id].parts.push(part);
-		}
-		return styles;
-	}
-
-	function insertStyleElement(options, styleElement) {
-		var head = getHeadElement();
-		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
-		if (options.insertAt === "top") {
-			if(!lastStyleElementInsertedAtTop) {
-				head.insertBefore(styleElement, head.firstChild);
-			} else if(lastStyleElementInsertedAtTop.nextSibling) {
-				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
-			} else {
-				head.appendChild(styleElement);
-			}
-			styleElementsInsertedAtTop.push(styleElement);
-		} else if (options.insertAt === "bottom") {
-			head.appendChild(styleElement);
-		} else {
-			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
-		}
-	}
-
-	function removeStyleElement(styleElement) {
-		styleElement.parentNode.removeChild(styleElement);
-		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
-		if(idx >= 0) {
-			styleElementsInsertedAtTop.splice(idx, 1);
-		}
-	}
-
-	function createStyleElement(options) {
-		var styleElement = document.createElement("style");
-		styleElement.type = "text/css";
-		insertStyleElement(options, styleElement);
-		return styleElement;
-	}
-
-	function createLinkElement(options) {
-		var linkElement = document.createElement("link");
-		linkElement.rel = "stylesheet";
-		insertStyleElement(options, linkElement);
-		return linkElement;
-	}
-
-	function addStyle(obj, options) {
-		var styleElement, update, remove;
-
-		if (options.singleton) {
-			var styleIndex = singletonCounter++;
-			styleElement = singletonElement || (singletonElement = createStyleElement(options));
-			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
-			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
-		} else if(obj.sourceMap &&
-			typeof URL === "function" &&
-			typeof URL.createObjectURL === "function" &&
-			typeof URL.revokeObjectURL === "function" &&
-			typeof Blob === "function" &&
-			typeof btoa === "function") {
-			styleElement = createLinkElement(options);
-			update = updateLink.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-				if(styleElement.href)
-					URL.revokeObjectURL(styleElement.href);
-			};
-		} else {
-			styleElement = createStyleElement(options);
-			update = applyToTag.bind(null, styleElement);
-			remove = function() {
-				removeStyleElement(styleElement);
-			};
-		}
-
-		update(obj);
-
-		return function updateStyle(newObj) {
-			if(newObj) {
-				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
-					return;
-				update(obj = newObj);
-			} else {
-				remove();
-			}
-		};
-	}
-
-	var replaceText = (function () {
-		var textStore = [];
-
-		return function (index, replacement) {
-			textStore[index] = replacement;
-			return textStore.filter(Boolean).join('\n');
-		};
-	})();
-
-	function applyToSingletonTag(styleElement, index, remove, obj) {
-		var css = remove ? "" : obj.css;
-
-		if (styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = replaceText(index, css);
-		} else {
-			var cssNode = document.createTextNode(css);
-			var childNodes = styleElement.childNodes;
-			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
-			if (childNodes.length) {
-				styleElement.insertBefore(cssNode, childNodes[index]);
-			} else {
-				styleElement.appendChild(cssNode);
-			}
-		}
-	}
-
-	function applyToTag(styleElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
-
-		if(media) {
-			styleElement.setAttribute("media", media)
-		}
-
-		if(styleElement.styleSheet) {
-			styleElement.styleSheet.cssText = css;
-		} else {
-			while(styleElement.firstChild) {
-				styleElement.removeChild(styleElement.firstChild);
-			}
-			styleElement.appendChild(document.createTextNode(css));
-		}
-	}
-
-	function updateLink(linkElement, obj) {
-		var css = obj.css;
-		var media = obj.media;
-		var sourceMap = obj.sourceMap;
-
-		if(sourceMap) {
-			// http://stackoverflow.com/a/26603875
-			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
-		}
-
-		var blob = new Blob([css], { type: "text/css" });
-
-		var oldSrc = linkElement.href;
-
-		linkElement.href = URL.createObjectURL(blob);
-
-		if(oldSrc)
-			URL.revokeObjectURL(oldSrc);
-	}
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var height = __webpack_require__(6)
-	var detect = __webpack_require__(8)
-	var Emitter = __webpack_require__(14)
-	var events = __webpack_require__(15)
-	var Tween = __webpack_require__(21)
-	var raf = __webpack_require__(26)
-	var throttle = __webpack_require__(27)
-	var debounce = __webpack_require__(28)
-	var Handlebar = __webpack_require__(30)
-	var wheel = __webpack_require__(31)
-	var hasTouch = __webpack_require__(34)
-	var computedStyle = __webpack_require__(7)
+	var height = __webpack_require__(2)
+	var detect = __webpack_require__(4)
+	var Emitter = __webpack_require__(10)
+	var events = __webpack_require__(11)
+	var Tween = __webpack_require__(17)
+	var raf = __webpack_require__(22)
+	var throttle = __webpack_require__(23)
+	var debounce = __webpack_require__(24)
+	var Handlebar = __webpack_require__(26)
+	var wheel = __webpack_require__(27)
+	var hasTouch = __webpack_require__(30)
+	var computedStyle = __webpack_require__(3)
 	var touchAction = detect.touchAction
 	var transform = detect.transform
 	var has3d = detect.has3d
@@ -904,10 +554,10 @@
 
 
 /***/ },
-/* 6 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var computedStyle = __webpack_require__(7)
+	var computedStyle = __webpack_require__(3)
 
 	/**
 	 * Find last visible element
@@ -941,7 +591,7 @@
 
 
 /***/ },
-/* 7 */
+/* 3 */
 /***/ function(module, exports) {
 
 	// DEV: We don't use var but favor parameters since these play nicer with minification
@@ -974,22 +624,22 @@
 
 
 /***/ },
-/* 8 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports.transition = __webpack_require__(9)
+	exports.transition = __webpack_require__(5)
 
-	exports.transform = __webpack_require__(10)
+	exports.transform = __webpack_require__(6)
 
-	exports.touchAction = __webpack_require__(11)
+	exports.touchAction = __webpack_require__(7)
 
-	exports.transitionend = __webpack_require__(12)
+	exports.transitionend = __webpack_require__(8)
 
-	exports.has3d = __webpack_require__(13)
+	exports.has3d = __webpack_require__(9)
 
 
 /***/ },
-/* 9 */
+/* 5 */
 /***/ function(module, exports) {
 
 	var styles = [
@@ -1015,7 +665,7 @@
 
 
 /***/ },
-/* 10 */
+/* 6 */
 /***/ function(module, exports) {
 
 	
@@ -1040,7 +690,7 @@
 
 
 /***/ },
-/* 11 */
+/* 7 */
 /***/ function(module, exports) {
 
 	
@@ -1066,7 +716,7 @@
 
 
 /***/ },
-/* 12 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/**
@@ -1096,11 +746,11 @@
 
 
 /***/ },
-/* 13 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var prop = __webpack_require__(10);
+	var prop = __webpack_require__(6);
 
 	// IE <=8 doesn't have `getComputedStyle`
 	if (!prop || !window.getComputedStyle) {
@@ -1126,7 +776,7 @@
 
 
 /***/ },
-/* 14 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1295,7 +945,7 @@
 
 
 /***/ },
-/* 15 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1304,15 +954,15 @@
 	 */
 
 	try {
-	  var events = __webpack_require__(16);
+	  var events = __webpack_require__(12);
 	} catch(err) {
-	  var events = __webpack_require__(16);
+	  var events = __webpack_require__(12);
 	}
 
 	try {
-	  var delegate = __webpack_require__(17);
+	  var delegate = __webpack_require__(13);
 	} catch(err) {
-	  var delegate = __webpack_require__(17);
+	  var delegate = __webpack_require__(13);
 	}
 
 	/**
@@ -1486,7 +1136,7 @@
 
 
 /***/ },
-/* 16 */
+/* 12 */
 /***/ function(module, exports) {
 
 	var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',
@@ -1526,7 +1176,7 @@
 	};
 
 /***/ },
-/* 17 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1534,15 +1184,15 @@
 	 */
 
 	try {
-	  var closest = __webpack_require__(18);
+	  var closest = __webpack_require__(14);
 	} catch(err) {
-	  var closest = __webpack_require__(18);
+	  var closest = __webpack_require__(14);
 	}
 
 	try {
-	  var event = __webpack_require__(16);
+	  var event = __webpack_require__(12);
 	} catch(err) {
-	  var event = __webpack_require__(16);
+	  var event = __webpack_require__(12);
 	}
 
 	/**
@@ -1583,7 +1233,7 @@
 
 
 /***/ },
-/* 18 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1591,9 +1241,9 @@
 	 */
 
 	try {
-	  var matches = __webpack_require__(19)
+	  var matches = __webpack_require__(15)
 	} catch (err) {
-	  var matches = __webpack_require__(19)
+	  var matches = __webpack_require__(15)
 	}
 
 	/**
@@ -1625,7 +1275,7 @@
 
 
 /***/ },
-/* 19 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1633,9 +1283,9 @@
 	 */
 
 	try {
-	  var query = __webpack_require__(20);
+	  var query = __webpack_require__(16);
 	} catch (err) {
-	  var query = __webpack_require__(20);
+	  var query = __webpack_require__(16);
 	}
 
 	/**
@@ -1681,7 +1331,7 @@
 
 
 /***/ },
-/* 20 */
+/* 16 */
 /***/ function(module, exports) {
 
 	function one(selector, el) {
@@ -1708,7 +1358,7 @@
 
 
 /***/ },
-/* 21 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1716,10 +1366,10 @@
 	 * Module dependencies.
 	 */
 
-	var Emitter = __webpack_require__(22);
-	var clone = __webpack_require__(23);
-	var type = __webpack_require__(24);
-	var ease = __webpack_require__(25);
+	var Emitter = __webpack_require__(18);
+	var clone = __webpack_require__(19);
+	var type = __webpack_require__(20);
+	var ease = __webpack_require__(21);
 
 	/**
 	 * Expose `Tween`.
@@ -1891,7 +1541,7 @@
 	};
 
 /***/ },
-/* 22 */
+/* 18 */
 /***/ function(module, exports) {
 
 	
@@ -2058,7 +1708,7 @@
 
 
 /***/ },
-/* 23 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2067,9 +1717,9 @@
 
 	var type;
 	try {
-	  type = __webpack_require__(24);
+	  type = __webpack_require__(20);
 	} catch (_) {
-	  type = __webpack_require__(24);
+	  type = __webpack_require__(20);
 	}
 
 	/**
@@ -2121,7 +1771,7 @@
 
 
 /***/ },
-/* 24 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/**
@@ -2161,7 +1811,7 @@
 
 
 /***/ },
-/* 25 */
+/* 21 */
 /***/ function(module, exports) {
 
 	
@@ -2337,7 +1987,7 @@
 
 
 /***/ },
-/* 26 */
+/* 22 */
 /***/ function(module, exports) {
 
 	/**
@@ -2377,7 +2027,7 @@
 
 
 /***/ },
-/* 27 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = throttle;
@@ -2415,7 +2065,7 @@
 
 
 /***/ },
-/* 28 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -2423,7 +2073,7 @@
 	 * Module dependencies.
 	 */
 
-	var now = __webpack_require__(29);
+	var now = __webpack_require__(25);
 
 	/**
 	 * Returns a function, that, as long as it continues to be invoked, will not
@@ -2474,7 +2124,7 @@
 
 
 /***/ },
-/* 29 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = Date.now || now
@@ -2485,10 +2135,10 @@
 
 
 /***/ },
-/* 30 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var detect = __webpack_require__(8)
+	var detect = __webpack_require__(4)
 	var has3d = detect.has3d
 	var transform = detect.transform
 
@@ -2545,12 +2195,12 @@
 
 
 /***/ },
-/* 31 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var toPX = __webpack_require__(32)
+	var toPX = __webpack_require__(28)
 
 	module.exports = mouseWheelListen
 
@@ -2591,12 +2241,12 @@
 
 
 /***/ },
-/* 32 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var parseUnit = __webpack_require__(33)
+	var parseUnit = __webpack_require__(29)
 
 	module.exports = toPX
 
@@ -2656,7 +2306,7 @@
 	}
 
 /***/ },
-/* 33 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = function parseUnit(str, out) {
@@ -2671,42 +2321,43 @@
 	}
 
 /***/ },
-/* 34 */
+/* 30 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 35 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var offset = __webpack_require__(36)
-	var ispinner = __webpack_require__(37)
-	var domify = __webpack_require__(38)
-	var debounce = __webpack_require__(28)
-	var template = __webpack_require__(42)
-	var events = __webpack_require__(16)
-	var Emitter = __webpack_require__(14)
+	var ispinner = __webpack_require__(32)
+	var domify = __webpack_require__(33)
+	var debounce = __webpack_require__(24)
+	var template = __webpack_require__(37)
+	var events = __webpack_require__(12)
+	var Emitter = __webpack_require__(10)
+	var computedStyle = __webpack_require__(3)
 
 	/**
 	 * Init more with element(for insertAfter), callback ,and scrollable
 	 *
-	 * @param {Function} fn
+	 * @param {Function} fn callback function that should return promise
 	 * @param {Element}  el
-	 * @param {Element}  scrollable
+	 * @param {Element}  scrollable [optional] default to el.parentNode
 	 * @api public
 	 */
 	function More(el, fn, scrollable) {
 	  if (!(this instanceof More)) return new More(el, fn, scrollable)
 	  this.el = el
+	  this.paddingBottom = parseInt(computedStyle(el, 'padding-bottom'), 10)
 	  this.callback = fn
 	  this.div = domify(template)
 	  insertAfter(this.el, this.div)
 	  this.spin = ispinner(this.div.querySelector('.more-refresh'), {width: '20px'})
 	  scrollable = scrollable || el.parentNode
 	  this.scrollable = scrollable
-	  this._onscroll = debounce(this.onscroll.bind(this), 10)
+	  this._onscroll = debounce(this.onscroll.bind(this), 16)
 	  events.bind(scrollable, 'scroll', this._onscroll)
 	}
 
@@ -2719,7 +2370,7 @@
 	 */
 	More.prototype.onscroll = function (e) {
 	  if (this.loading || this._disabled) return
-	  if (!check(this.scrollable) && e !== true) return
+	  if (!check(this.el, this.scrollable, this.paddingBottom) && e !== true) return
 	  this.div.style.visibility = 'visible'
 	  // var h = computedStyle(this.el, 'height')
 	  this.loading = true
@@ -2740,12 +2391,23 @@
 	/**
 	 * Disable loading more data
 	 *
-	 * @return {undefined}
 	 * @api public
 	 */
 	More.prototype.disable = function () {
 	  this._disabled = true
 	  this.div.style.display = 'none'
+	  this.loading = false
+	}
+
+	/**
+	 * Enable for loading more data
+	 *
+	 * @public
+	 */
+	More.prototype.enable = function () {
+	  this._disabled = false
+	  this.div.style.display = 'block'
+	  this.div.style.visibility = 'hidden'
 	  this.loading = false
 	}
 
@@ -2773,13 +2435,16 @@
 	/**
 	 * check if scrollable scroll to end
 	 */
-	function check(scrollable) {
+	function check(el, scrollable, pb) {
+	  var rect = el.getBoundingClientRect()
+	  var dis = rect.top + el.clientHeight - pb
 	  if (scrollable === window) {
 	    // viewport height
 	    var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-	    if (getDocHeight() - vh == offset.y) return true
-	  } else if (scrollable.scrollHeight - scrollable.scrollTop - scrollable.clientHeight < 20) {
-	    return true
+	    if (dis <= vh) return true
+	  } else {
+	    var sh = scrollable.getBoundingClientRect().top + scrollable.clientHeight
+	    if (dis <= sh) return true
 	  }
 	  return false
 	}
@@ -2793,42 +2458,16 @@
 	  }
 	}
 
-	function getDocHeight() {
-	    var D = document;
-	    return Math.max(D.body.scrollHeight, D.documentElement.scrollHeight);
-	}
-
 	module.exports = More
 
 
 /***/ },
-/* 36 */
-/***/ function(module, exports) {
-
-	var supportPageOffset = window.pageXOffset !== undefined
-	var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat')
-	var body = document.body
-
-	Object.defineProperty(exports, 'x', {
-	  get: function () {
-	    return supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : body.scrollLeft
-	  }
-	})
-
-	Object.defineProperty(exports, 'y', {
-	  get: function () {
-	    return supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : body.scrollTop
-	  }
-	})
-
-
-/***/ },
-/* 37 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var domify = __webpack_require__(38)
-	var template = __webpack_require__(39)
-	var classes = __webpack_require__(40)
+	var domify = __webpack_require__(33)
+	var template = __webpack_require__(34)
+	var classes = __webpack_require__(35)
 
 	module.exports = function (parent, opt) {
 	  var el = domify(template)
@@ -2851,7 +2490,7 @@
 
 
 /***/ },
-/* 38 */
+/* 33 */
 /***/ function(module, exports) {
 
 	
@@ -2969,20 +2608,20 @@
 
 
 /***/ },
-/* 39 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ispinner ispinner-animating\">\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n  <div class=\"ispinner-blade\"></div>\n</div>\n";
 
 /***/ },
-/* 40 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var index = __webpack_require__(41);
+	var index = __webpack_require__(36);
 
 	/**
 	 * Whitespace regexp.
@@ -3168,7 +2807,7 @@
 
 
 /***/ },
-/* 41 */
+/* 36 */
 /***/ function(module, exports) {
 
 	module.exports = function(arr, obj){
@@ -3180,10 +2819,10 @@
 	};
 
 /***/ },
-/* 42 */
+/* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh\"></i>\n</div>\n";
+	module.exports = "<div class=\"more-loading\">\n  <i class=\"more-refresh\"></i>\n  <span class=\"more-text\">正在加载...</span>\n</div>\n";
 
 /***/ }
 /******/ ]);

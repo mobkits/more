@@ -59,6 +59,8 @@ Remove inserted div and unbind events
 
 Force more start loading data without scroll event fired (will not load if it's loading or disabled)
 
+Return promise
+
 ## License
 
 MIT

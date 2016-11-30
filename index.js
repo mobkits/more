@@ -36,7 +36,7 @@ Emitter(More.prototype)
  * @api private
  */
 More.prototype.onscroll = function (e) {
-  if (this.loading || this._disabled) return
+  if (this.loading || this._disabled) return Promise.resolve(null)
   if (!check(this.el, this.scrollable, this.paddingBottom) && e !== true) return
   this.div.style.visibility = 'visible'
   // var h = computedStyle(this.el, 'height')
@@ -51,8 +51,9 @@ More.prototype.onscroll = function (e) {
   }
   var res = this.callback(cb)
   if (res && typeof res.then === 'function') {
-    res.then(cb, cb)
+    return res.then(cb, cb)
   }
+  return Promise.resolve(null)
 }
 
 /**
@@ -85,7 +86,7 @@ More.prototype.enable = function () {
  * @api public
  */
 More.prototype.load = function () {
-  this.onscroll(true)
+  return this.onscroll(true)
 }
 
 /**
